@@ -1,4 +1,4 @@
-10.20.20.91
-10.20.20.92
-10.20.20.93
-10.20.20.94
+10.20.20.91 apache_package=apache2 php_package=libapache2-mod-php
+10.20.20.92 apache_package=apache2 php_package=libapache2-mod-php
+10.20.20.93 apache_package=apache2 php_package=libapache2-mod-php
+10.20.20.94 apache_package=httpd php_package=php
