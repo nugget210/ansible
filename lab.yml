@@ -4,20 +4,30 @@
   become: true
   pre_tasks:
 
-  - name: install updates (CentOS)
+  - name: update repo cache (CentOS)
     tags: always
     dnf: 
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "CentOS"
 
-  - name: install updates (Ubuntu)
+  - name: update repo cache (Ubuntu)
     tags: always
     apt: 
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: add ssh key for ansuser
+    tags: always
+    authorized_key:
+      user: ansuser
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxqKB4y6oc6K/YF/ToqTjQ9lXUnWGgGVjc69M/nC6lJ ansible"
+       
 - hosts: web_servers
   become: true
   tasks: 
@@ -39,6 +49,15 @@
         - php
       state: latest
     when: ansible_distribution == "CentOS"
+
+  - name: start httpd (CentOS)
+    tags: centos, httpd, apache
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentOS"
+
 
   - name: copy default html file for site
     tags: apache,apache2,httpd
