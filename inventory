@@ -8,4 +8,5 @@
 [file_servers]
 10.20.20.93 
 
-
+[workstations]
+10.20.20.90
