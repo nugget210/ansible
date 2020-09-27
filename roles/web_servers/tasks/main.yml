@@ -1,29 +1,17 @@
-- name: install apache and php for Ubuntu servers
-  tags: apache,apache2,ubuntu
-  apt: 
+- name: install apache and php packages
+  tags: apache,apache2,php,httpd
+  package: 
     name: 
-      - apache2
-      - libapache2-mod-php
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"
     state: latest
-  when: ansible_distribution == "Ubuntu"
 
-- name: install apache and php for CentOS servers
-  tags: apache,httpd,centos
-  dnf: 
-    name: 
-      - httpd
-      - php
-    state: latest
-  when: ansible_distribution == "CentOS"
-
-- name: start httpd (CentOS)
-  tags: centos, httpd, apache
+- name: start and enable apache service
+  tags: httpd,apache
   service:
-    name: httpd
+    name: "{{ apache_service }}"
     state: started
     enabled: yes
-  when: ansible_distribution == "CentOS"
-
 
 - name: copy default html file for site
   tags: apache,apache2,httpd
