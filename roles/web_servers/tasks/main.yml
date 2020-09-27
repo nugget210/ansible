@@ -13,6 +13,17 @@
     state: started
     enabled: yes
 
+- name: change e-mail address for admin
+  tags: apache,httpd
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin somebody@somewhere.net
+  when: ansible_distribution == "CentOS"
+  notify: restart_apache
+
+
+
 - name: copy default html file for site
   tags: apache,apache2,httpd
   copy: 
