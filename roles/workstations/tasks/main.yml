@@ -1,0 +1,3 @@
+- name: install htop
+  package:
+    name: htop

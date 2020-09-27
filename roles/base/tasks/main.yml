@@ -1,0 +1,5 @@
+- name: add ssh key for ansuser
+  authorized_key:
+    user: ansuser
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxqKB4y6oc6K/YF/ToqTjQ9lXUnWGgGVjc69M/nC6lJ ansible"
+  
