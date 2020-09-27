@@ -20,79 +20,28 @@
 
 - hosts: all
   become: true
-  tasks: 
+  roles:
+    - base
 
-  - name: add ssh key for ansuser
-    tags: always
-    authorized_key:
-      user: ansuser
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILxqKB4y6oc6K/YF/ToqTjQ9lXUnWGgGVjc69M/nC6lJ ansible"
-       
+- hosts: workstations
+  become: true
+  roles:
+    - workstations
+
 - hosts: web_servers
   become: true
-  tasks: 
-
-  - name: install apache and php for Ubuntu servers
-    tags: apache,apache2,ubuntu
-    apt: 
-      name: 
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"
-
-  - name: install apache and php for CentOS servers
-    tags: apache,httpd,centos
-    dnf: 
-      name: 
-        - httpd
-        - php
-      state: latest
-    when: ansible_distribution == "CentOS"
-
-  - name: start httpd (CentOS)
-    tags: centos, httpd, apache
-    service:
-      name: httpd
-      state: started
-      enabled: yes
-    when: ansible_distribution == "CentOS"
-
-
-  - name: copy default html file for site
-    tags: apache,apache2,httpd
-    copy: 
-      src: default_site.html
-      dest: /var/www/html/index.html
-      owner: root
-      group: root
-      mode: 0644
+  roles:
+    - web_servers
 
 - hosts: db_servers
   become: true
-  tasks:
-
-  - name: install mariadb package (CentOS)
-    tags: db,mariadb,centos
-    dnf:
-      name: mariadb
-      state: latest
-    when: ansible_distribution == "CentOS"
-
-  - name: install mariadb package (Ubuntu)
-    tags: db,ubuntu,mariadb
-    apt:
-      name: mariadb-server
-      state: latest
-    when: ansible_distribution == "Ubuntu"
+  roles:
+    - db_servers
 
 - hosts: file_servers
   become: true
-  tasks: 
+  roles:
+    - file_servers
 
-  - name: install samba package
-    tags: samba
-    package:
-      name: samba
-      state: latest 
+
 
