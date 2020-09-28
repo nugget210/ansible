@@ -74,6 +74,7 @@
   loop:
     - '5666'
     - '22'
+    - '80'
   when: ansible_distribution == "Ubuntu"
   notify: reload_ufw
 
@@ -87,4 +88,5 @@
   loop:
     - 5666/tcp
     - 22/tcp
+    - 80/tcp
   notify: reload_firewalld
