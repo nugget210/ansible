@@ -12,4 +12,7 @@
     group: root
     mode: 0644
   notify: restart_sshd
-  
+
+- name: set timezone to Australia/Melbourne
+  timezone: 
+    name: Australia/Melbourne  
