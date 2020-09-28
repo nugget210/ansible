@@ -2,3 +2,18 @@
   service: 
     name: sshd
     state: restarted
+
+- name: reload_firewalld
+  service: 
+    name: firewalld
+    state: restarted
+
+- name: reload_ufw
+  service: 
+    name: ufw
+    state: restarted
+
+- name: restart_nrpe
+  service: 
+    name: "{{ nrpe_package_name }}"
+    state: restarted
