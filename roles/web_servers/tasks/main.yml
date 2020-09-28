@@ -1,3 +1,36 @@
+- name: install Centos dependencies
+  tags: centos,nrpe
+  dnf:
+    name:
+      - epel-release
+    state: latest
+  when: ansible_distribution == "CentosOS"
+  
+- name: install nagios nrpe
+  tags: nrpe
+  package:
+    name:
+      - "{{ nrpe_package_name }}" 
+      - "{{ nrpe_monitoring_package_name }}"
+    state: latest
+
+- name: start and enable nrpe service
+  tags: nrpe
+  service: 
+    name: "{{ nrpe_package_name }}"
+    state: started
+    enabled: yes
+
+- name: generate nrpe file from template
+  tags: nrpe
+  template: 
+    src: "{{ nrpe_template_file }}"
+    dest: /etc/nagios/nrpe.cfg
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_nrpe
+
 - name: install apache and php packages
   tags: apache,apache2,php,httpd
   package: 
@@ -22,8 +55,6 @@
   when: ansible_distribution == "CentOS"
   notify: restart_apache
 
-
-
 - name: copy default html file for site
   tags: apache,apache2,httpd
   copy: 
@@ -32,3 +63,28 @@
     owner: root
     group: root
     mode: 0644
+
+- name: enable firewall and add default apps (Ubuntu)
+  tags: firewall
+  ufw:
+    state: enabled
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - '5666'
+    - '22'
+  when: ansible_distribution == "Ubuntu"
+  notify: reload_ufw
+
+- name: enable firewall and add default apps (CentOS)
+  tags: firewall
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  when: ansible_distribution == "CentOS"
+  loop:
+    - 5666/tcp
+    - 22/tcp
+  notify: reload_firewalld
