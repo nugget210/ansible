@@ -13,13 +13,22 @@
     mode: 0644
   notify: restart_sshd
 
+- name: install Centos net-tools
+  tags: centos,nrpe
+  dnf:
+    name:
+      - net-tools
+    state: latest
+  when: ansible_distribution == "CentOS"
+
+
 - name: install Centos dependencies
   tags: centos,nrpe
   dnf:
     name:
       - epel-release
     state: latest
-  when: ansible_distribution == "CentosOS"
+  when: ansible_distribution == "CentOS"
   
 - name: install nagios nrpe
   tags: nrpe

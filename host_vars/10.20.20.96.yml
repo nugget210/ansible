@@ -1,0 +1,10 @@
+apache_package_name: httpd
+apache_service: httpd
+php_package_name: php
+mariadb_package_name: mariadb
+mariadb_service: mariadb
+ssh_users: "nug ansuser"
+ssh_template_file: sshd_config_centos.j2
+nrpe_package_name: nrpe
+nrpe_monitoring_package_name: nagios-plugins-load
+nrpe_template_file: nrpe_centos.j2
